@@ -8,18 +8,27 @@ class FCMHelper
 {
     const API_KEY = '************';
 
-    public static function enviarNotificacionPush($notificacion, $to, $data = [], $toTipo = 'mult')
+    /**
+     * Sends a push notification using Firebase Cloud Messaging (FCM).
+     *
+     * @param array $notification Notification data.
+     * @param string|array $to Recipient(s) of the notification.
+     * @param array $data Additional data to send with the notification.
+     * @param string $toType Type of recipient: 'mult' (multiple devices), 'topic' (topic), 'user' (specific user).
+     * @return array Response from FCM server.
+     */
+    public static function sendPushNotification($notification, $to, $data = [], $toType = 'mult')
     {
         $client = new Client();
 
         $json = array();
 
-        if (!empty($notificacion)) {
-            $notificacion['click_action'] = 'FCM_PLUGIN_ACTIVITY';
-            $json['notification'] = $notificacion;
+        if (!empty($notification)) {
+            $notification['click_action'] = 'FCM_PLUGIN_ACTIVITY';
+            $json['notification'] = $notification;
         }
 
-        switch ($toTipo) {
+        switch ($toType) {
             case 'mult':
                 $json['registration_ids'] = $to;
                 break;
